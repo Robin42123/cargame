@@ -1,0 +1,370 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <style>
+       * {
+           margin:0;
+           padding:0;
+       }
+       body{
+           overflow:hidden
+       }
+       #main{
+           width:390px;
+           height:625px;
+       }
+       #ltree, #rtree {
+           background-image:url("left.jpg");
+           position:absolute;
+           left:250px;
+           height:50000px;
+           width:150px;
+           margin-right:200px;
+           transform:translateY(-40000px)
+       }
+
+       .l-tree,.r-tree{
+           animation:road 150s linear infinite;
+           background-repeat:repeat-y
+       }
+       #rtree {
+           width: 200px;
+           left: 850px;
+           background-image: url("right.jpg");
+       }
+       #road{
+           background-image:url("road.jpg");
+           position:absolute;
+           left:450px;
+           height:2000px;
+           width:390px;
+           transform:translateY(-1025px)    
+       }
+       .bgimg{
+           animation:road 3.4s linear infinite;
+           background-repeat:repeat-y;
+
+       }
+       @keyframes road{
+          100%{
+              transform:translateY(0px)
+          }
+       }
+       #c1{
+           position:absolute;
+           height:150px;
+            width:100px;
+            top:450px;
+            left:464px;
+            transition:0.2s all
+       }
+       .enemy{
+           position:absolute;
+           height:130px;
+           width:100px;
+           top:-200px;
+           animation:move 3.5s linear;
+
+
+       }
+       @keyframes move{
+           100%{
+               top:625px;
+           }
+       }
+       .out1{
+           animation:down 2s linear
+       }
+       @keyframes down{
+           25%{
+               opacity:0.2;
+           }
+           50%{
+               opacity:1
+           }
+           75%{
+               opacity:0.2
+           }
+           100%{
+               opacity:1;
+           }
+       }
+       label{
+           font-size:20px;
+           margin:10px;
+       }
+       #over {
+           font-size: 40px;
+           position: absolute;
+           left: 39%;
+           top: 10%;
+           color: white;
+           background-color: rgba(0, 0,0, 0.4);
+           padding: 15px;
+           opacity: 0;
+       }
+       .retry1, .again {
+           font-size: 20px;
+           margin: 0px 0px 0px 50px;
+           color: white;
+           background-color: rgba(0, 0,0, 0.2);
+           padding: 15px;
+       }
+
+           .again:hover {
+               cursor: pointer;
+           }
+
+       #win1 {
+           font-size: 40px;
+           position: absolute;
+           left: 34.5%;
+           top: 10%;
+           color: aliceblue;
+           background-color: rgba(0, 0,0, 0.4);
+           padding: 15px;
+           opacity: 0;
+       }
+
+       .again {
+           margin-left: 120px;
+       }
+       #r-key {
+           background-image: url("rr.png");
+           position: absolute;
+           left: 1100px;
+           bottom:70px;
+           width:200px;
+           height:400px;
+           background-repeat:no-repeat;
+       }
+       #l-key {
+           background-image: url("lef.png");
+           position: absolute;
+           right: 1200px;
+           bottom: 70px;
+           width: 200px;
+           height: 400px;
+           background-repeat: no-repeat;
+       }
+       #accel {
+           background-image: url("cc.jfif");
+           position: absolute;
+           left: 1100px;
+           bottom: 30px;
+           width: 200px;
+           height: 200px;
+           background-repeat: no-repeat;
+       }
+       #brek {
+           background-image: url("o.jfif");
+           position: absolute;
+           right: 1200px;
+           bottom: 10px;
+           width: 200px;
+           height: 200px;
+           background-repeat: no-repeat;
+          
+       }
+   </style>
+  
+      
+</head>
+<body>
+    <div id="l-key" onclick="left()"></div>
+    <div id="brek" onclick="brk()"></div>
+   <div class="l-tree" id="ltree"></div>
+    <div id="main">
+
+        <div class="bgimg" id="road"></div>
+        <label>score:-</label> <label id="win">0</label>
+        <label>loss</label><label id="loss">0</label>
+
+        <img src="car3.png" id="c1" />
+        <audio autoplay hidden id="sound">
+            <source src="" />
+        </audio>
+        <div id="over"> Game Over<br> <input type="button" class="retry1" value="Retry" onclick="again()"></div>
+        <div id="win1"> You Win The Game <br> <input type="button" class="again " value="Again" onclick="again()"></div>
+
+    </div>
+    <div id="rtree"class="r-tree"></div>
+    <div id="r-key"onclick="right()"></div>
+    <div id="accel"onclick="boost()"></div>
+
+
+    <script>
+       
+
+        function again() {
+           location.reload()
+         
+        }
+        var car = document.getElementById("c1")
+        var crash = document.getElementById("sound")
+        var temp = 0;
+        var tmp = 0;
+        var win = 0;
+        var loss = 3;
+        car.style.left = "464px"
+        var main = document.getElementById("main")
+        document.addEventListener("keyup", function() {
+           var Key = event.keyCode;
+            //alert(Key);
+            if (Key == 39 && temp == 0) {
+                car.style.left="595px"
+                temp = 1;
+                tmp = 1;
+            }
+            else if (tmp==1 && Key==37) {
+                car.style.left = "464px"
+                temp = 0;
+            }
+            else if (temp == 1 && Key== 39) {
+                car.style.left = "725px";
+                tmp = 0;
+            }
+            else if (Key == 37 && tmp == 0) {
+                car.style.left = "595px";
+                tmp = 1;
+            }
+        })
+        function left(){
+          
+            //alert(Key);
+            if (tmp==1) {
+                car.style.left = "464px"
+                temp = 0;
+            }
+            else if (tmp == 0) {
+                car.style.left = "595px";
+                tmp = 1;
+            }
+          
+           
+        }
+        function right(){
+      
+
+        if ( temp == 0) {
+            car.style.left="595px"
+            temp = 1;
+            tmp = 1;
+        }
+          
+        else if (temp==1) {
+            car.style.left = "725px";
+            tmp = 0;
+        }
+        }
+        function boost(){
+            road.style.height="7000px"
+            road.style.transform="translateY(-5000px)"
+            ltree.style.height="200000px";
+            ltree.style.transform="translateY(-150000px)"
+            rtree.style.height="200000px";
+            rtree.style.transform="translateY(-150000px)"
+            enm.style.top="1000px";
+            crash.src = "spd.mp3";
+
+           
+        }
+        function brk(){
+            road.style.height="2000px"
+            road.style.transform="translateY(-1000px)"
+            ltree.style.height="50000px";
+            ltree.style.transform="translateY(-40000px)"
+            rtree.style.height="50000px";
+            rtree.style.transform="translateY(-40000px)"
+            crash.src = "brk.mp3";
+           
+        }
+
+      
+        var c1 = 0;
+        var start =  setInterval(()=> {
+            var enemy = document.createElement("img");
+        enemy.id="enm"
+        const values = ["464","595","725"];
+        var val = Math.floor( Math.random() * 3);
+        enemy.style.left=values[val]+"px"
+        enemy.src="car2.png"
+        enemy.className="enemy"
+        main.appendChild(enemy)
+        var a=setTimeout(again,2400)
+        var b=setTimeout(again,3000)
+
+        function again(){
+
+            if(car.style.left=="464px"&&enemy.style.left=="464px"){
+                main.removeChild(enemy)
+                crash.src = "crash.mp3";
+                car.className = "out1";
+                loss--;
+                c1=0;
+            }
+            else if (car.style.left == "595px" && enemy.style.left == "595px"){
+                // alert("Loss The game");
+                main.removeChild(enemy);
+                crash.src = "crash.mp3";
+                crash.volume= 0.2;
+                loss--;
+                car.className = "out1";
+                c1=0;
+            }
+            else if(car.style.left == "725px" && enemy.style.left == "725px"){
+                // alert("Loss The game");
+                main.removeChild(enemy);
+                crash.src = "crash.mp3";
+                loss--;
+                car.className = "out1";
+                c1=0;
+            }
+            else{
+                c1 = 1;
+            }
+        }
+        if(c1==1){
+            win++
+        }
+        document.getElementById("win").innerHTML=win
+        document.getElementById("loss").innerHTML=loss
+        if(loss==0 ){
+            document.getElementById("over").style.opacity="1"
+            document.getElementById("road").classList.remove("bgimg")
+            document.getElementById("ltree").classList.remove("l-tree")
+            document.getElementById("rtree").classList.remove("r-tree")
+            clearInterval(start)
+            main.removeChild(enemy)
+        }
+        else if ( win==10) {
+            document.getElementById("win1").style.opacity="1"
+            document.getElementById("road").classList.remove("bgimg")
+            document.getElementById("ltree").classList.remove("l-tree")
+            document.getElementById("rtree").classList.remove("r-tree")
+            clearInterval(start)
+            main.removeChild(enemy)
+    
+        }
+        car.classList.remove("out1")
+        },3200)
+        setTimeout(()=>{
+            main.removeChild(enemy);
+        },3600)
+        function rl(){
+            window.location.href("htmlpage.html")
+        }
+
+      
+    </script>
+
+
+
+</body>
+
+</html>
